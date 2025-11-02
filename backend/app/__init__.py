@@ -24,11 +24,15 @@ def create_app():
     from app.routes.tenant_routes import tenant_bp
     from app.routes.user_routes import user_bp
     from app.routes.test_routes import test_bp
+    from app.routes.employee_routes import employee_bp
+    from app.routes.access_control_routes import access_control_bp
     
     app.register_blueprint(admin_bp)
     app.register_blueprint(tenant_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(test_bp)
+    app.register_blueprint(employee_bp)
+    app.register_blueprint(access_control_bp)
     
     # Health check route
     @app.route('/health', methods=['GET'])

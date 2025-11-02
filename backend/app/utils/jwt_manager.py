@@ -4,7 +4,7 @@ from app.config import Config
 from functools import wraps
 from flask import request, jsonify
 
-def create_access_token(user_id, user_type, email, tenant_id=None):
+def create_access_token(user_id, user_type, email, tenant_id=None, role=None):
     """
     Create JWT access token
     
@@ -13,6 +13,7 @@ def create_access_token(user_id, user_type, email, tenant_id=None):
         user_type: Type of user ('admin', 'tenant', 'user')
         email: User's email
         tenant_id: Optional tenant ID (for users and tenants)
+        role: Optional user role (for RBAC)
     
     Returns:
         JWT token string
@@ -27,6 +28,9 @@ def create_access_token(user_id, user_type, email, tenant_id=None):
     
     if tenant_id:
         payload['tenant_id'] = tenant_id
+    
+    if role:
+        payload['role'] = role
     
     token = jwt.encode(
         payload,

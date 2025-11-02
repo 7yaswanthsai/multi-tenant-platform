@@ -37,7 +37,8 @@ def tenant_login():
             user_id=tenant.id,
             user_type='tenant',
             email=tenant.admin_email,
-            tenant_id=tenant.id
+            tenant_id=tenant.id,
+            role='tenant_admin'
         )
         
         return jsonify({

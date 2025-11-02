@@ -14,7 +14,7 @@ def init_db(app):
     
     with app.app_context():
         # Import all models to ensure they're registered with SQLAlchemy
-        from app.models import admin, tenant, user, test
+        from app.models import admin, tenant, user, test, access_matrix
         
         # Create all tables
         db.create_all()
@@ -22,6 +22,9 @@ def init_db(app):
         
         # Create default admin if not exists
         create_default_admin()
+        
+        # Initialize default RBAC access matrix
+        initialize_default_rbac()
 
 def create_default_admin():
     """Create default admin user if not exists"""
@@ -52,4 +55,15 @@ def create_default_admin():
         print(f"✅ Default admin created: {Config.ADMIN_EMAIL}")
     else:
         print(f"ℹ️  Admin already exists: {Config.ADMIN_EMAIL}")
+
+def initialize_default_rbac():
+    """Initialize default RBAC access matrix if not exists"""
+    from app.utils.initialize_rbac import initialize_default_access_matrix
+    
+    # Initialize global permissions (for super_admin)
+    result = initialize_default_access_matrix(tenant_id=None)
+    if result['total'] > 0:
+        print(f"✅ Default RBAC access matrix initialized: {result['created']} created, {result['updated']} updated")
+    else:
+        print("ℹ️  RBAC access matrix already initialized")
 

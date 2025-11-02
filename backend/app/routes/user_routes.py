@@ -38,12 +38,23 @@ def user_login():
                 'temp_login': True
             }), 200
         
+        # Map user role to RBAC role
+        role_mapping = {
+            'user': 'user',
+            'employee': 'employee',
+            'manager': 'manager',
+            'sales_rep': 'employee',
+            'tenant': 'tenant_admin'
+        }
+        rbac_role = role_mapping.get(user.role, 'user')
+        
         # Create JWT token
         token = create_access_token(
             user_id=user.id,
             user_type='user',
             email=user.email,
-            tenant_id=user.tenant_id
+            tenant_id=user.tenant_id,
+            role=rbac_role
         )
         
         return jsonify({
@@ -88,12 +99,23 @@ def user_login_by_slug(slug):
                 'temp_login': True
             }), 200
         
+        # Map user role to RBAC role
+        role_mapping = {
+            'user': 'user',
+            'employee': 'employee',
+            'manager': 'manager',
+            'sales_rep': 'employee',
+            'tenant': 'tenant_admin'
+        }
+        rbac_role = role_mapping.get(user.role, 'user')
+        
         # Create JWT token
         token = create_access_token(
             user_id=user.id,
             user_type='user',
             email=user.email,
-            tenant_id=user.tenant_id
+            tenant_id=user.tenant_id,
+            role=rbac_role
         )
         
         return jsonify({
@@ -136,11 +158,23 @@ def reset_password():
         
         db.session.commit()
         
+        # Map user role to RBAC role
+        role_mapping = {
+            'user': 'user',
+            'employee': 'employee',
+            'manager': 'manager',
+            'sales_rep': 'employee',
+            'tenant': 'tenant_admin'
+        }
+        rbac_role = role_mapping.get(user.role, 'user')
+        
         # Create JWT token for automatic login
         token = create_access_token(
             user_id=user.id,
             user_type='user',
-            email=user.email
+            email=user.email,
+            tenant_id=user.tenant_id,
+            role=rbac_role
         )
         
         return jsonify({
@@ -219,11 +253,23 @@ def user_register():
         db.session.add(user)
         db.session.commit()
         
+        # Map user role to RBAC role
+        role_mapping = {
+            'user': 'user',
+            'employee': 'employee',
+            'manager': 'manager',
+            'sales_rep': 'employee',
+            'tenant': 'tenant_admin'
+        }
+        rbac_role = role_mapping.get(user.role, 'user')
+        
         # Create JWT token for automatic login
         token = create_access_token(
             user_id=user.id,
             user_type='user',
-            email=user.email
+            email=user.email,
+            tenant_id=user.tenant_id,
+            role=rbac_role
         )
         
         return jsonify({

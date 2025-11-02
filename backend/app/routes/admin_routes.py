@@ -40,7 +40,8 @@ def admin_login():
         token = create_access_token(
             user_id=admin.id,
             user_type='admin',
-            email=admin.email
+            email=admin.email,
+            role='super_admin'
         )
         
         return jsonify({
